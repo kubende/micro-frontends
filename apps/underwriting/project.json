@@ -1,0 +1,31 @@
+{
+  "name": "underwriting",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/underwriting/src",
+  "projectType": "application",
+  "tags": ["scope:remote", "type:app"],
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/underwriting",
+        "command": "pnpm dev"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/dist"],
+      "options": {
+        "cwd": "apps/underwriting",
+        "command": "pnpm build"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/underwriting",
+        "command": "pnpm typecheck"
+      }
+    }
+  }
+}

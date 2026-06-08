@@ -1,0 +1,25 @@
+{
+  "name": "product-config",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "rsbuild dev --port 3001",
+    "build": "rsbuild build",
+    "preview": "rsbuild preview --port 3001",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@module-federation/enhanced": "^0.6.9",
+    "@workspace/contracts": "workspace:*",
+    "@workspace/design-system": "workspace:*",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.2"
+  },
+  "devDependencies": {
+    "@module-federation/rsbuild-plugin": "^0.6.9",
+    "@rsbuild/core": "^1.0.14",
+    "@rsbuild/plugin-react": "^1.0.3"
+  }
+}

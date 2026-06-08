@@ -1,0 +1,42 @@
+{
+  "root": true,
+  "plugins": ["@nx"],
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      "rules": {
+        "@nx/enforce-module-boundaries": [
+          "error",
+          {
+            "enforceBuildableLibDependency": false,
+            "allow": [],
+            "depConstraints": [
+              {
+                "sourceTag": "scope:shared",
+                "onlyDependOnLibsWithTags": ["scope:shared"]
+              },
+              {
+                "sourceTag": "scope:shell",
+                "onlyDependOnLibsWithTags": ["scope:shared"],
+                "notDependOnLibsWithTags": ["scope:remote"]
+              },
+              {
+                "sourceTag": "scope:remote",
+                "onlyDependOnLibsWithTags": ["scope:shared"],
+                "notDependOnLibsWithTags": ["scope:remote", "scope:shell"]
+              },
+              {
+                "sourceTag": "type:app",
+                "onlyDependOnLibsWithTags": ["type:lib", "type:app"]
+              },
+              {
+                "sourceTag": "type:lib",
+                "onlyDependOnLibsWithTags": ["type:lib"]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "name": "product-config",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/product-config/src",
+  "projectType": "application",
+  "tags": ["scope:remote", "type:app"],
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/product-config",
+        "command": "pnpm dev"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/dist"],
+      "options": {
+        "cwd": "apps/product-config",
+        "command": "pnpm build"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/product-config",
+        "command": "pnpm typecheck"
+      }
+    }
+  }
+}

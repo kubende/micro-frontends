@@ -1,0 +1,33 @@
+{
+  "name": "insurance-workspace",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "pnpm@9.12.0",
+  "scripts": {
+    "predev": "lsof -ti :3000 -ti :3001 -ti :3002 -ti :3003 2>/dev/null | xargs -r kill -9 2>/dev/null; exit 0",
+    "dev": "nx run-many -t dev --parallel=5",
+    "dev:shell": "nx dev shell",
+    "dev:product-config": "nx dev product-config",
+    "dev:underwriting": "nx dev underwriting",
+    "build": "nx run-many -t build",
+    "lint": "nx run-many -t lint",
+    "typecheck": "nx run-many -t typecheck",
+    "graph": "nx graph",
+    "clean": "rm -rf apps/*/dist apps/*/node_modules/.federation .nx/cache .nx/workspace-data"
+  },
+  "devDependencies": {
+    "@nx/eslint-plugin": "19.8.4",
+    "@types/node": "^20.14.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/parser": "^8.8.1",
+    "eslint": "^8.57.1",
+    "nx": "19.8.4",
+    "nx-ignore": "^1.6.6",
+    "typescript": "5.5.4"
+  },
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=9"
+  }
+}
