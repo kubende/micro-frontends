@@ -21,11 +21,8 @@ to write any of this:
   (Cloudflare sets this automatically on every deploy).
 - `cloudflare/_headers` per app: CORS + cache headers for the remotes,
   long-cache for hashed chunks.
-- `cloudflare/_redirects` for the shell: SPA fallback so React Router
-  handles deep links.
-- Rsbuild `output.copy` is configured to copy `cloudflare/_headers` and
-  `cloudflare/_redirects` into the build output, where Cloudflare Pages
-  reads them.
+- Rsbuild `output.copy` is configured to copy `cloudflare/_headers` into
+  the build output, where Cloudflare reads it.
 - `wrangler.jsonc` per app, declaring `assets.directory: "./dist"`
   (Cloudflare's unified Workers+Assets format — `pages_build_output_dir`
   was deprecated in wrangler 4.x). Required in monorepos because without
@@ -33,8 +30,9 @@ to write any of this:
   and refuses to deploy — it can't tell which project you mean.
 - The shell's `wrangler.jsonc` also sets
   `assets.not_found_handling: "single-page-application"` so deep links
-  serve `index.html` and React Router handles them. (Under the new
-  model this replaces the `_redirects` file.)
+  serve `index.html` and React Router handles them. (Don't add a
+  `_redirects` file — it will conflict with this setting and the deploy
+  validator rejects the combination.)
 
 All you need to do is the Cloudflare dashboard work below.
 
@@ -301,6 +299,7 @@ use the query param above.
 | Build fails: Node 18 used despite Node 20 in code | Cloudflare default Node is older | Set `NODE_VERSION=20` env var on every project |
 | Deploy step fails: "Wrangler application detection logic has been run in the root of a workspace" | Cloudflare's Root Directory is set to repo root, not the app dir | Set Root Directory to `apps/<app>` per project; verify `wrangler.jsonc` exists in each app dir |
 | Deploy step fails: "Missing entry-point to Worker script or to assets directory" | `wrangler.jsonc` uses the deprecated `pages_build_output_dir` field | Replace with `"assets": { "directory": "./dist" }`; add `not_found_handling: "single-page-application"` for the shell |
+| Deploy step fails: "Invalid _redirects configuration: Infinite loop detected" | `_redirects` file with `/* /index.html 200` conflicts with `not_found_handling: "single-page-application"` | Delete `apps/shell/cloudflare/_redirects` — `not_found_handling` already provides SPA fallback |
 | Install fails: `ERR_PNPM_OUTDATED_LOCKFILE` | `package.json` changed without committing `pnpm-lock.yaml` | Run `pnpm install` locally and commit both files together |
 | Manifest never updates after deploy | Browser caching | Hard refresh; verify `Cache-Control: s-maxage=60` in response headers |
 | `factory is undefined` in browser | Singleton version drift across apps | Pin React (and react-router-dom) to the same version in every app's `package.json`; bump together |

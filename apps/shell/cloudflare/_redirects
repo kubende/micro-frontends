@@ -1,3 +1,0 @@
-# SPA rewrites — every path that isn't a static asset serves index.html so
-# React Router can handle it. 200 status (not 301) so the URL stays intact.
-/*    /index.html    200
