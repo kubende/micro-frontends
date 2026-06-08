@@ -26,6 +26,11 @@ to write any of this:
 - Rsbuild `output.copy` is configured to copy `cloudflare/_headers` and
   `cloudflare/_redirects` into the build output, where Cloudflare Pages
   reads them.
+- `wrangler.jsonc` per app, declaring `pages_build_output_dir: "./dist"`.
+  Required by Cloudflare's wrangler-based deploy in monorepos — without
+  it, wrangler sees the `pnpm-workspace.yaml` at the repo root, decides
+  it's in a workspace, and refuses to deploy because it can't tell which
+  project you mean.
 
 All you need to do is the Cloudflare dashboard work below.
 
@@ -62,10 +67,13 @@ All you need to do is the Cloudflare dashboard work below.
    `*.pages.dev` subdomain).
 4. **Build settings:**
    - Framework preset: **None**.
+   - **Root directory (advanced):** `apps/shell` ← important. This scopes
+     wrangler's view to the shell app only, so it doesn't get confused by
+     the workspace `pnpm-workspace.yaml`. pnpm still resolves workspace
+     packages by searching upward.
    - Build command: `pnpm install --frozen-lockfile && pnpm --filter shell build`
-   - Build output directory: `apps/shell/dist`
-   - Root directory (advanced): leave **blank** (build runs from repo
-     root so pnpm workspaces resolve).
+   - Build output directory: `dist` (relative to root directory, so the
+     real path is `apps/shell/dist`)
 5. **Environment variables (Build & deploy → Variables and Secrets):**
 
    | Name | Value | Type |
@@ -89,8 +97,9 @@ All you need to do is the Cloudflare dashboard work below.
 Same as Step 1, but:
 
 - Project name: `mfe-product-config`
+- **Root directory:** `apps/product-config`
 - Build command: `pnpm install --frozen-lockfile && pnpm --filter product-config build`
-- Build output directory: `apps/product-config/dist`
+- Build output directory: `dist`
 - Environment variables:
 
   | Name | Value | Scope |
@@ -110,8 +119,9 @@ Same as Step 1, but:
 Same again, but:
 
 - Project name: `mfe-underwriting`
+- **Root directory:** `apps/underwriting`
 - Build command: `pnpm install --frozen-lockfile && pnpm --filter underwriting build`
-- Build output directory: `apps/underwriting/dist`
+- Build output directory: `dist`
 - Environment variables:
 
   | Name | Value | Scope |
@@ -285,6 +295,8 @@ use the query param above.
 | Deep link returns 404 | Shell missing `_redirects` | Verify `apps/shell/cloudflare/_redirects` exists and gets copied to dist |
 | Build fails: `command not found: pnpm` | `PNPM_VERSION` not set | Set `PNPM_VERSION` env var to `9.12.0` on every project |
 | Build fails: Node 18 used despite Node 20 in code | Cloudflare default Node is older | Set `NODE_VERSION=20` env var on every project |
+| Deploy step fails: "Wrangler application detection logic has been run in the root of a workspace" | Cloudflare's Root Directory is set to repo root, not the app dir | Set Root Directory to `apps/<app>` per project; verify `wrangler.jsonc` exists in each app dir |
+| Install fails: `ERR_PNPM_OUTDATED_LOCKFILE` | `package.json` changed without committing `pnpm-lock.yaml` | Run `pnpm install` locally and commit both files together |
 | Manifest never updates after deploy | Browser caching | Hard refresh; verify `Cache-Control: s-maxage=60` in response headers |
 | `factory is undefined` in browser | Singleton version drift across apps | Pin React (and react-router-dom) to the same version in every app's `package.json`; bump together |
 | Preview deploy chunks load from wrong host | `CF_PAGES_URL` not set | This is automatic for branch deploys; only an issue if you somehow override the env. Check Pages build logs. |

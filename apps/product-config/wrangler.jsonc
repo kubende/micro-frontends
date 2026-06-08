@@ -1,0 +1,6 @@
+{
+  "$schema": "https://json.schemastore.org/wrangler.json",
+  "name": "mfe-product-config",
+  "compatibility_date": "2025-06-01",
+  "pages_build_output_dir": "./dist"
+}
