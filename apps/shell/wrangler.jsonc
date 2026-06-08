@@ -1,7 +1,12 @@
 {
   "$schema": "https://json.schemastore.org/wrangler.json",
-  "name": "insurer-shell",
+  "name": "micro-frontends",
   "compatibility_date": "2025-06-01",
+  // Explicit so wrangler doesn't warn about defaults: leaves the free
+  // workers.dev URL enabled (useful for previews); flip to false once
+  // your custom domain is the only entry point you want.
+  "workers_dev": true,
+  "preview_urls": true,
   "assets": {
     "directory": "./dist",
     // SPA fallback: every unmatched path serves index.html so React Router
