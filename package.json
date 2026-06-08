@@ -23,7 +23,7 @@
     "@typescript-eslint/parser": "^8.8.1",
     "eslint": "^8.57.1",
     "nx": "19.8.4",
-    "nx-ignore": "^1.6.6",
+    "nx-ignore": "19.8.0",
     "typescript": "5.5.4"
   },
   "engines": {
