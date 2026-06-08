@@ -2,5 +2,11 @@
   "$schema": "https://json.schemastore.org/wrangler.json",
   "name": "insurer-shell",
   "compatibility_date": "2025-06-01",
-  "pages_build_output_dir": "./dist"
+  "assets": {
+    "directory": "./dist",
+    // SPA fallback: every unmatched path serves index.html so React Router
+    // takes over. Replaces the role of the `_redirects` file under
+    // Cloudflare's unified Workers+Assets model.
+    "not_found_handling": "single-page-application"
+  }
 }

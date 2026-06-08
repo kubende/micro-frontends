@@ -2,5 +2,7 @@
   "$schema": "https://json.schemastore.org/wrangler.json",
   "name": "mfe-underwriting",
   "compatibility_date": "2025-06-01",
-  "pages_build_output_dir": "./dist"
+  "assets": {
+    "directory": "./dist"
+  }
 }
